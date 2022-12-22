@@ -1,0 +1,64 @@
+<ion-modal trigger="open-modal" 
+[isOpen]="isModalCOpen" 
+[backdropDismiss]="true" 
+[initialBreakpoint]="1" 
+[breakpoints]="[0.5, 0.90, 1]"
+(willDismiss)="onWillDismiss($event)"
+>
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="">
+  <ion-modal [isOpen]="isModalCOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{title}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpenC(false)">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="">
+        <ion-item>
+          <ion-label position="stacked">*Titulo:</ion-label>
+          <ion-input [(ngModel)] = "title" 
+            type="text" 
+            placeholder="Escribe un título" 
+            required
+            >
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Descripción:</ion-label>
+          <ion-textarea type="text" 
+            [(ngModel)] = "description"
+            placeholder="Escribe una descripción" 
+            >
+          </ion-textarea>
+        </ion-item>
+        
+          <ion-item>
+          <ion-label>Privacidad:</ion-label>
+          <ion-select 
+            [(ngModel)] = "privacyStatus"
+            interface="popover" 
+            value="public" 
+            placeholder="Selecciona">
+            <ion-select-option *ngFor="let item of privacy_status" value="{{item.clave}}">{{item.texto}}</ion-select-option>
+          </ion-select>
+        </ion-item> 
+        <ion-item>
+          <ion-button (click)="createPlaylist()" color="success" slot="end" shape="round">
+            Guardar
+          </ion-button>
+        </ion-item>
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+</ion-modal>
+

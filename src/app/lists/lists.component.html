@@ -1,0 +1,309 @@
+
+<ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh2($event)">
+      <ion-refresher-content>
+      </ion-refresher-content>
+    </ion-refresher>
+    <ion-progress-bar *ngIf="load" type="indeterminate"></ion-progress-bar>
+    <ion-item>
+      <ion-label>Jala hacia abajo para ver playlists actualizadas.</ion-label>  
+    </ion-item>
+    <ion-item>
+      <ion-label>Desliza hacia abajo para cargar mas playlists.</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="this.createplaylist.setOpenC(true)" expand="block" slot="end" shape="round">
+        Crear Playlist
+      </ion-button>
+    </ion-item>
+    <ion-item-divider class="no-padding" sticky>
+      <ion-searchbar 
+      id="search-pl"
+      animated="true"
+      show-clear-button="always" 
+      placeholder="Buscar playlists por título"
+      (ionChange)="searchPlaylists($event)"
+      color="light"
+      ></ion-searchbar>
+    </ion-item-divider>
+  <ion-item>
+    <ion-label>Total Playlists: {{this.items.length}}</ion-label>
+  </ion-item>
+
+  <ion-fab *ngIf="cancel_button" (click)="cancel()" slot="fixed" vertical="bottom" horizontal="start">
+    <ion-fab-button>
+      Cancelar
+    </ion-fab-button>
+
+  </ion-fab>
+
+<ion-list>
+  <ion-grid>
+    <ion-row class="ion-text-center">
+      <ion-col size="7">
+        Playlist
+      </ion-col>
+      <ion-col size="5">
+        Acciones
+      </ion-col>
+    </ion-row>
+
+  <ion-row *ngFor="let item of items; index as i; first as isFirst">
+      <ion-col size="6">
+        <ion-item
+          style="
+          --padding-start: 0px;
+          --padding-end: 0px;
+          --inner-padding-start: 0px;
+          --inner-padding-end: 0px;
+          "
+          >
+          <ion-badge color="primary" mode="ios" *ngIf="select_ids_lists[item.id]?.length>0">{{select_ids_lists[item.id]?.length}}</ion-badge>
+          &nbsp;
+          <ion-checkbox 
+          *ngIf="!paste_button"
+          id="check_{{item.id}}"
+          slot="start"
+          style="
+          margin-inline-end: 0px !important;
+          --border-width: 0px;
+          --size: 0px;
+          "
+          (ionChange)="selectPlaylist(item.id,$event)"></ion-checkbox>
+          <ion-avatar>
+            <img src="{{item.snippet.thumbnails.default.url}}" />
+          </ion-avatar>
+
+         {{item.snippet.title}} <span *ngIf="isFirst"> </span>
+      </ion-item>
+      </ion-col>  
+      
+        <ion-col style="padding: 0px;" size="6" class="ion-text-center">
+        <ion-button 
+            class="btn_icon_pl"
+        (click)='setOpen(true, item.id)'  fill="clear">
+          <ion-icon slot="icon-only" name="list-outline"></ion-icon>
+        </ion-button>
+        
+        <ion-router-link  target="_blank"  href="https://music.youtube.com/playlist?list={{item.id}}">
+          <ion-button 
+          class="btn_icon_pl"
+          fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="play-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-router-link>
+        
+        <ion-router-link  target="_blank" href="https://www.youtube.com/playlist?list={{item.id}}">
+          <ion-button
+            class="btn_icon_pl"
+          fill="clear" shape="round">
+            <ion-icon slot="icon-only" name="logo-youtube" ></ion-icon>
+          </ion-button>
+        </ion-router-link>
+        
+        <ion-button
+          class="btn_icon_pl"
+        (click)="this.editplaylist.setOpenE(true,item, i)" 
+        size="" fill="clear" shape="round">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-button>  
+
+          <ion-button 
+          color="success"
+            class="btn_icon_pl"
+           size="small" 
+          *ngIf="paste_button"
+          (click)="copySongs(item.id)" >
+            Pegar
+          </ion-button>
+        <!-- </ion-item> -->
+        <ion-button class="btn_icon_pl" (click)="deletePlaylist(item.id, item.snippet.title)" fill="clear" shape="round">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+        </ion-col>
+        
+  </ion-row>
+
+</ion-grid>
+</ion-list>
+
+<ion-modal trigger="open-modal" 
+      [isOpen]="isModalOpen" 
+      [backdropDismiss]="true" 
+      [initialBreakpoint]="1" 
+      [breakpoints]="[0.5, 0.90, 1]"
+      (willDismiss)="onWillDismiss($event)"
+      >
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title >
+          <!-- Modal -->
+        </ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="setOpen(false)">Cerrar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content *ngIf="!end_load || !end_delete" >
+      <ion-progress-bar type="indeterminate"></ion-progress-bar>
+    </ion-content>
+    
+    <ion-content *ngIf="end_load && end_delete">
+
+      <ion-refresher slot="fixed" (ionRefresh)="refreshPlaylist($event)">
+        <ion-refresher-content>
+        </ion-refresher-content>
+      </ion-refresher>
+      <ion-item>
+        <ion-label>Jala hacia abajo para actualizar</ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>Total Elementos:</ion-label>
+        {{songs.length}}
+      </ion-item>
+      <ion-item>
+        <ion-label>Elementos Seleccionadas:</ion-label>
+        {{select_ids_lists[active_playlist]?.length}}
+      </ion-item>
+      
+        <ion-searchbar 
+        (ionChange)="searchSongs($event)"
+        animated="true" placeholder="Buscar por título o artista"
+         show-clear-button="always"
+         color="light"
+         ></ion-searchbar>
+      <ion-item-divider sticky>
+          <ion-button (click)="copy()" shape="round" slot="end">
+            Copiar
+          </ion-button>
+          <ion-button slot="end" (click)="delete()" shape="round" color="danger">
+            Eliminar
+          </ion-button>
+      </ion-item-divider>
+      <ion-grid class="ion-text-center">
+        <ion-button *ngIf="prev_songs_btn" (click)="playListContent('prev')"  fill="clear" shape="round">
+          Anterior
+        </ion-button>
+        <ion-button *ngIf="next_songs_btn" (click)="playListContent('next')"  fill="clear" shape="round">
+          Siguiente
+        </ion-button>
+      </ion-grid>
+      
+      <ion-item>
+        <ion-checkbox  
+        style="
+        margin-inline-end: 5px !important;
+        "
+        *ngIf="select_ids_lists[active_playlist]?.length==total_songs[active_playlist]"
+        checked="true"
+        (ionChange)="selectAllSongsPlaylist($event)" 
+        slot="start"></ion-checkbox>
+        <ion-checkbox  
+        style="
+        margin-inline-end: 5px !important;
+        "
+        *ngIf="select_ids_lists[active_playlist]?.length!=total_songs[active_playlist]"
+        (ionChange)="selectAllSongsPlaylist($event)" 
+        slot="start"></ion-checkbox>
+        <ion-label>Seleccionar toda la playlist (seleccionadas:{{select_ids_lists[active_playlist]?.length}})</ion-label>
+
+      </ion-item>
+
+      <ion-item
+        style="
+            --inner-padding-end: 0px !important;
+    --padding-start: 0px;
+        "
+      *ngFor="let song of songs; index as i; first as isFirst">
+            <ion-grid fixed>
+              <ion-row>
+                <ion-col size="10" style="
+                --ion-grid-column-padding:0px !important;
+                ">
+          <ion-item
+              style="
+              --padding-start: 0px;
+              "
+          >
+          <ion-checkbox 
+          class="chbx_mrg"
+          slot="start" 
+          checked="true"
+          *ngIf="select_ids_lists[active_playlist]?.includes(song.id)"
+            (ionChange)="
+            selectSongPlaylist(
+              song.id , 
+              song.snippet.resourceId.videoId,
+              $event)">
+          </ion-checkbox>
+          <ion-checkbox 
+          class="chbx_mrg"
+          slot="start" 
+          *ngIf="!select_ids_lists[active_playlist]?.includes(song.id)"
+            (ionChange)="
+            selectSongPlaylist(
+              song.id , 
+              song.snippet.resourceId.videoId,
+              $event)">
+          </ion-checkbox>
+
+          <ion-avatar
+            style="
+            margin:5px
+            "
+          slot="start">
+             <ion-img  src="{{song.snippet.thumbnails.default?.url}}"></ion-img>
+          </ion-avatar>
+          <ion-label expand="full">
+            <h2>
+              {{song.snippet.title}} 
+            </h2>
+            <p>{{song.snippet.videoOwnerChannelTitle}}</p>
+          </ion-label>
+        </ion-item>
+        </ion-col>
+        
+        <ion-col size="2" class="ion-margin-vertical ion-justify-content-center">
+          <ion-router-link  target="_blank" href="https://www.youtube.com/watch?v={{song.contentDetails.videoId}}">
+            <ion-label title="Ver en Youtube"><ion-icon slot="icon-only" name="logo-youtube" ></ion-icon></ion-label>
+          </ion-router-link>
+          <ion-router-link  target="_blank" href="https://music.youtube.com/watch?v={{song.contentDetails.videoId}}">
+            <ion-label title="Ver en MusicYoutube"><ion-icon slot="icon-only" name="play-circle-outline"></ion-icon></ion-label>
+          </ion-router-link>
+        </ion-col>
+        
+          </ion-row>
+          </ion-grid>
+        
+        </ion-item>
+        
+        <ion-grid class="ion-text-center">
+          <ion-button *ngIf="prev_songs_btn" (click)="playListContent('prev')"  fill="clear" shape="round">
+            Anterior
+          </ion-button>
+          <ion-button *ngIf="next_songs_btn" (click)="playListContent('next')"  fill="clear" shape="round">
+            Siguiente
+          </ion-button>
+        </ion-grid>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<app-editplaylist [notif]="this.presentToast" [httpclient]="this.httpservice" [items]="this.items">  
+
+</app-editplaylist>
+
+<app-createplaylist [httpclient]="this.httpservice" 
+[notif]="this.presentToast" 
+[items]="this.items"
+[checkerror]="this.checkConnectionAndError"
+>
+
+</app-createplaylist>
+
+<ion-infinite-scroll (ionInfinite)="pageList('next', $event)">
+  <ion-infinite-scroll-content></ion-infinite-scroll-content>
+</ion-infinite-scroll>
+</ion-content>
+

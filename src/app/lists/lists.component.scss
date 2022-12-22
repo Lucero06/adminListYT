@@ -1,0 +1,26 @@
+
+ion-button.dangerAlert{
+    --background: red !important;
+    background-color: red !important;
+}
+
+
+ion-alert.custom-alert {
+    --backdrop-opacity: 0.7;
+  }
+  
+  .custom-alert .alert-button-group {
+    padding: 8px;
+  }
+  
+  
+  .custom-alert button.alert-button {
+    border: 0.55px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.2)
+  }
+  
+  button.alert-button.alert-button-cancel {
+    border-right: 0;
+    border-bottom-left-radius: 13px;
+    border-top-left-radius: 13px;
+    color: var(--ion-color-danger);
+  }

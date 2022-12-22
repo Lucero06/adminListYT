@@ -1,0 +1,37 @@
+
+<ion-grid>
+      
+  <ion-row>
+    <ion-col size="12" class="ion-text-center">
+      <ion-label>Inicia Sesión con tu Cuenta de Google Youtube:</ion-label>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="12" class="ion-text-center">
+        <ion-note >
+          Al iniciar sesión aceptas los 
+          <a routerDirection="forward" 
+            [routerLink]="['/terminos']">
+            términos de uso</a>.
+        </ion-note>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-row *ngIf="msj_terminos">
+      <ion-col size="12">
+        <ion-text color="danger">
+          *Selecciona Aceptar los términos de uso
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    
+<ion-col size="12" class="ion-text-center">
+  
+  <ion-button  (click)="logingoogle()" shape="round">
+    Iniciar
+  </ion-button>
+
+</ion-col>
+</ion-row>
+</ion-grid>

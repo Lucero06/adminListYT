@@ -1,0 +1,16 @@
+{
+  "/lists":{
+    "target":"https://www.googleapis.com/youtube/v3/",
+    "secure":true,
+    "changeOrigin":true,
+    "logLevel": "debug"
+},
+    
+        "/login": {
+          "target": "https://accounts.google.com/o/oauth2/v2/auth",
+          "secure": true,
+          "changeOrigin":true,
+          "logLevel":"debug"
+        }
+      
+}

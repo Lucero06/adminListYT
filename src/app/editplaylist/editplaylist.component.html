@@ -1,0 +1,65 @@
+<ion-modal trigger="open-modal" 
+[isOpen]="isModalEOpen" 
+[backdropDismiss]="true" 
+[initialBreakpoint]="1" 
+[breakpoints]="[0.5, 0.90, 1]"
+(willDismiss)="onWillDismiss($event)"
+>
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="">
+  <ion-modal [isOpen]="isModalEOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{playlistInfo.snippet?.title}}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="setOpenE(false)">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="">
+        <ion-item>
+          <ion-label position="stacked">Titulo:</ion-label>
+          <ion-input [(ngModel)] = "playlistInfo.snippet.title" 
+            type="text" 
+            placeholder="Escribe un título" 
+            value="{{playlistInfo.snippet?.title}}">
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Descripción:</ion-label>
+          <!-- <ion-label>{{playlistInfo.snippet?.description}}</ion-label> -->
+          <ion-textarea type="text" 
+            [(ngModel)] = "playlistInfo.snippet.description"
+            placeholder="Escribe una descripción" 
+            value="{{playlistInfo.snippet?.description}}">
+          </ion-textarea>
+        </ion-item>
+          <ion-item>
+          <ion-label>Privacidad:</ion-label>
+          <ion-select 
+            [(ngModel)] = "playlistInfo.status.privacyStatus"
+            interface="popover" 
+            value="{{playlistInfo.status?.privacyStatus}}" 
+            placeholder="Selecciona">
+            <ion-select-option *ngFor="let item of privacy_status" value="{{item.clave}}">{{item.texto}}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="updatePlaylist()" color="success" slot="start" shape="round">
+            Guardar cambios
+          </ion-button>
+          <ion-button slot="end" (click)="clearChanges()"  shape="round">
+            Limpiar cambios
+          </ion-button>
+        </ion-item>
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+</ion-modal>

@@ -1,0 +1,42 @@
+
+<ion-content class="ion-padding">
+  
+
+  <h1>Términos de uso</h1>
+<p class="ion-text-justify">
+  
+  Al usar esta aplicación los usuarios aceptan los 
+   <span class="link" (click)="openurl.openurl(terminos_servicio_youtube)"> términos de servicio de 
+    YouTube</span> .
+  Esta aplicación usa YouTube API Services:
+  
+  Accede a la información 
+  de la cuenta de YouTube en la que iniciaste sesión:
+  playlists, videos en playlists, ya sean privadas o públicas; 
+  para ver y editar el contenido de las playlists de la cuenta. 
+  No guardamos tu información para otros usos aparte de los
+  mencionados.
+
+  Puedes revocar el acceso de esta aplicación a tus datos a través de la
+  <a href="{{revoke_api_clien_access}}" target="_blank">
+    configuración de seguridad de Google</a>.
+  
+    <br>
+    <a href="{{google_privacy_policy}}" target="_blank">
+      Política de Privacidad de Google.
+    </a>
+  <br>
+    Puedes ponerte en contacto para mas información 
+    al siguiente correo: dev.lemones6@gmail.com
+</p>
+
+<p class="ion-text-center">
+    <ion-button 
+  routerDirection="forward" 
+  [routerLink]="['/']"  
+  shape="round">
+      Iniciar sesión
+  </ion-button>
+</p>
+
+</ion-content>

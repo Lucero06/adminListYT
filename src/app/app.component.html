@@ -1,0 +1,92 @@
+<ion-app>
+
+<ion-menu contentId="main-content">
+  <ion-header>
+    <ion-toolbar>
+      
+      <ion-title>Admin List</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list id="inbox-list" lines="full">
+      <ion-list-header>
+        <ion-img src="assets/developed-with-youtube-lowercase-light.png"></ion-img>
+      </ion-list-header>
+      <ion-item *ngFor="let p of appPages; let i = index" 
+      routerDirection="root" 
+      [routerLink]="[p.url]"   
+        routerLinkActive="selected"
+        (click)="closeMenu()"
+        >
+        <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + ''"></ion-icon>
+        <ion-label>{{ p.title }}</ion-label>
+      </ion-item>
+      <ion-item *ngIf="storage.cerrar_sesion" (click)="logout()" routerDirection="root">
+        <ion-icon slot="start" [ios]="'exit' + '-outline'" [md]="'exit' + ''"></ion-icon>
+        <ion-label>Cerrar sesión</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list>
+      <ion-list-header>
+        Acerca de
+      </ion-list-header>
+      <ion-item
+      routerDirection="forward" 
+      [routerLink]="['/terminos']"   
+        routerLinkActive="selected"
+        (click)="closeMenu()"
+        >
+          Términos de uso
+      </ion-item>
+      <ion-item>
+          <!-- <a  href="https://www.youtube.com/t/terms" target="_blank"> -->
+            <span class="link" (click)="openurl.openurl('https://www.youtube.com/t/terms')"> Términos de servicio de 
+              YouTube</span>
+      </ion-item>
+      <ion-list-header>
+        Contacto | Opiniones :D
+      </ion-list-header>
+      <a href="mailto:dev.lemones6@gmail.com" target="_blank">
+        <ion-note>dev.lemones6@gmail.com</ion-note></a>
+        
+       
+      <ion-item class="">
+          <a href="https://www.linkedin.com/in/luceromonserratsp/" target="_blank">
+            <ion-icon name="logo-linkedin"></ion-icon>
+          </a>  
+          <a href="mailto:dev.lemones6@gmail.com" target="_blank">
+            <ion-icon name="mail-open"></ion-icon>
+          </a>  
+      </ion-item>
+      
+
+    </ion-list>
+
+  </ion-content>
+</ion-menu>
+<ion-header>
+
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Menu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content id="main-content">
+  <ion-router-outlet ></ion-router-outlet>
+</ion-content>
+
+<ion-footer *ngIf="router.url === '/login' || router.url == '/terminos'">
+  <ion-toolbar>
+    <ion-buttons >
+      <ion-button (click)="openurl.openurl('https://www.youtube.com/t/terms')" >
+        <ion-label>Términos de servicio de YouTube</ion-label>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-footer>
+</ion-app>
